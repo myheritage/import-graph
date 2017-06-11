@@ -39,7 +39,7 @@ Using the graph object, we can visit only the changed file and its ancestors (in
 Install with [npm](https://npmjs.org/package/import-graph)
 
 ```bash
-npm i --save-dev import-graph
+npm i --S import-graph
 ```
 
 ## Usage
