@@ -19,21 +19,16 @@ class ImportGraph {
     createGraph(entryPath, options) {
         let graph = null,
             lstatForEntryPath = fs.lstatSync(entryPath),
-            isFile = (lstatForEntryPath.isFile());
-        if (isFile || lstatForEntryPath.isDirectory()) {
+            isDir = lstatForEntryPath.isDirectory();
+        if (isDir && !lstatForEntryPath.isFile()) {
+            return Promise.reject("Entry path must be a file or a directory");
+        } else {
             entryPath = path.resolve(entryPath);
             options = processOptions(options);
             let importParser = new ImportParser();
-            if (isFile) {
-                graph = new Graph(importParser, options);
-                graph.addFile(entryPath);
-            } else {
-                graph = new Graph(importParser, options, entryPath);
-                graph.init();
-            }
-
+            graph = new Graph(importParser, options);
+            return graph.init(entryPath, isDir);
         }
-        return graph;
     }
 }
 
