@@ -1,9 +1,7 @@
-'use strict';
-
-let fs = require('fs'),
-    path = require('path'),
-    Graph = require('./lib/graph'),
-    ImportParser = require('./lib/import-parser');
+const fs = require('fs');
+const path = require('path');
+const Graph = require('./lib/graph');
+const ImportParser = require('./lib/import-parser');
 
 /**
  * class ImportGraph
@@ -14,7 +12,7 @@ class ImportGraph {
      * @name ImportGraph.createGraph
      * @param {String} entryPath
      * @param {Object} [options]
-     * @returns {Graph | null}
+     * @returns {Promise<Graph, string>}
      */
     createGraph(entryPath, options) {
         let graph = null,
