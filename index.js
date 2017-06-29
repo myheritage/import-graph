@@ -18,7 +18,7 @@ class ImportGraph {
         let graph = null,
             lstatForEntryPath = fs.lstatSync(entryPath),
             isDir = lstatForEntryPath.isDirectory();
-        if (isDir && !lstatForEntryPath.isFile()) {
+        if (!isDir && !lstatForEntryPath.isFile()) {
             return Promise.reject("Entry path must be a file or a directory");
         } else {
             entryPath = path.resolve(entryPath);
