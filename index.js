@@ -18,7 +18,7 @@ class ImportGraph {
         options = processOptions(options);
         let importParser = new ImportParser();
         let graph = new Graph(importParser, options);
-        return graph.init(entryPath, isDir);
+        return graph.init(entryPath);
     }
 }
 
