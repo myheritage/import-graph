@@ -15,18 +15,10 @@ class ImportGraph {
      * @returns {Promise<Graph, string>}
      */
     createGraph(entryPath, options) {
-        let graph = null,
-            lstatForEntryPath = fs.lstatSync(entryPath),
-            isDir = lstatForEntryPath.isDirectory();
-        if (!isDir && !lstatForEntryPath.isFile()) {
-            return Promise.reject("Entry path must be a file or a directory");
-        } else {
-            entryPath = path.resolve(entryPath);
-            options = processOptions(options);
-            let importParser = new ImportParser();
-            graph = new Graph(importParser, options);
-            return graph.init(entryPath, isDir);
-        }
+        options = processOptions(options);
+        let importParser = new ImportParser();
+        let graph = new Graph(importParser, options);
+        return graph.init(entryPath, isDir);
     }
 }
 
@@ -36,7 +28,6 @@ class ImportGraph {
 function processOptions(options) {
     return Object.assign({
         extensions: ['js'],
-        extensionPrefixes: [],
         dependencyPattern: 'js',
         loadPaths: [process.cwd()]
     }, options);
