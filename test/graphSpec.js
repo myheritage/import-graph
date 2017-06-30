@@ -16,19 +16,24 @@ let path            = require('path'),
         7: path.join(pathToMockFiles,'dir2','7.txt'),
         8: path.join(pathToMockFiles,'8.txt'),
         9: path.join(pathToMockFiles,'dir1','dir3','9.txt')
+    },
+    createGraph = options => {
+        beforeEach(() => {
+            graph = new Graph(importParserMock, Object.assign({
+                loadPaths: [pathToMockFiles],
+                extensions: ['txt'],
+                extensionPrefixes: [],
+                dependencyPattern: 'js'
+            }, options))
+        });
     };
 
 describe('graph', () => {
     beforeEach(() => {
         importParserMock = new ImportParserMock();
-        graph = new Graph(importParserMock, {
-            loadPaths: [pathToMockFiles],
-            extensions: ['txt'],
-            extensionPrefixes: [],
-            dependencyPattern: 'js'
-        })
     });
     describe('init method with directory', () => {
+        createGraph();
         it('should create graph for "txt" files', (done) => {
             graph.init(pathToMockFiles, true)
                 .then(() => {
@@ -47,7 +52,7 @@ describe('graph', () => {
                 .then(() => {
                     console.log("Ready");
                     expect(Array.from(graph.graph.get(testFilesPaths[1]).parents)).to.deep.equal([]);
-                    expect(Array.from(graph.graph.get(testFilesPaths[1]).children)).to.deep.equal([testFilesPaths[4],testFilesPaths[2]]);
+                    expect(Array.from(graph.graph.get(testFilesPaths[1]).children)).to.deep.equal([testFilesPaths[2], testFilesPaths[4]]);
                     expect(Array.from(graph.graph.get(testFilesPaths[2]).parents)).to.deep.equal([testFilesPaths[1]]);
                     expect(Array.from(graph.graph.get(testFilesPaths[2]).children)).to.deep.equal([testFilesPaths[3]]);
                     expect(Array.from(graph.graph.get(testFilesPaths[3]).parents)).to.deep.equal([testFilesPaths[2]]);
@@ -72,6 +77,7 @@ describe('graph', () => {
     });
 
     describe('init method with file', () => {
+        createGraph();
         it('should create graph for "txt" files on this file', (done) => {
             graph.init(testFilesPaths[1], false)
                 .then(() => {
@@ -100,6 +106,7 @@ describe('graph', () => {
     });
 
     describe('visitAncestors method', () => {
+        createGraph();
         it('should not visit any ancestors for a parent-less node', (done) => {
             let notInside = true;
             graph.init(testFilesPaths[1], false)
@@ -124,6 +131,7 @@ describe('graph', () => {
     });
 
     describe('visitDescendants method', () => {
+        createGraph();
         it('should not visit any descendants for a children-less node', (done) => {
             let notInside = true;
             graph.init(testFilesPaths[1], false)
@@ -144,6 +152,40 @@ describe('graph', () => {
                     done();
                 })
                 .catch(error => done(error));
+        });
+    });
+    
+    describe('exclude files', () => {
+        createGraph({exclude: ["dir2"]});
+        it('should create graph with "dir2" folder excluded', (done) => {
+            graph.init(pathToMockFiles, true)
+                .then(() => {
+                    expect(Array.from(graph.graph.get(testFilesPaths[1]).parents)).to.deep.equal([]);
+                    expect(Array.from(graph.graph.get(testFilesPaths[1]).children)).to.deep.equal([testFilesPaths[4]]);
+                    expect(Array.from(graph.graph.get(testFilesPaths[4]).parents)).to.deep.equal([testFilesPaths[1]]);
+                    expect(Array.from(graph.graph.get(testFilesPaths[4]).children)).to.deep.equal([]);
+                    expect(Array.from(graph.graph.get(testFilesPaths[7]).parents)).to.deep.equal([]);
+                    expect(Array.from(graph.graph.get(testFilesPaths[7]).children)).to.deep.equal([]);
+                    expect(graph.graph.get(testFilesPaths[7]).include).to.be.false;
+                    done();
+                }).catch(error => done(error));
+        });
+    });
+
+    describe('include files', () => {
+        createGraph({include: ["dir1", "dir2"]});
+        it('should create graph "with" dir1 and "dir2" folders included', (done) => {
+            graph.init(pathToMockFiles, true)
+                .then(() => {
+                    console.log(graph.graph);
+                    expect(graph.graph.get(testFilesPaths[1]).include).to.be.false;
+                    expect(graph.graph.get(testFilesPaths[4]).include).to.be.true;
+                    expect(Array.from(graph.graph.get(testFilesPaths[4]).parents)).to.deep.equal([]);
+                    expect(Array.from(graph.graph.get(testFilesPaths[4]).children)).to.deep.equal([testFilesPaths[6]]);
+                    expect(Array.from(graph.graph.get(testFilesPaths[7]).parents)).to.deep.equal([]);
+                    expect(Array.from(graph.graph.get(testFilesPaths[7]).children)).to.deep.equal([testFilesPaths[9]]);
+                    done();
+                }).catch(error => done(error));
         });
     });
 });
