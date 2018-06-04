@@ -1,8 +1,7 @@
 {
   "name": "import-graph",
-  "version": "2.0.0",
-  "description":
-    "Create a graph of dependencies between files, supporting ES6 import syntax, SCSS @import syntax, CommonJS require syntax, mix of import and require and a custom regexp input. Based on sass-graph",
+  "version": "2.0.1-0",
+  "description": "Create a graph of dependencies between files, supporting ES6 import syntax, SCSS @import syntax, CommonJS require syntax, mix of import and require and a custom regexp input. Based on sass-graph",
   "main": "index.js",
   "scripts": {
     "test": "mocha ./test/*Spec.js"
@@ -11,7 +10,12 @@
     "type": "git",
     "url": "https://github.com/myheritage/import-graph"
   },
-  "keywords": ["graph", "import", "require", "dependencies"],
+  "keywords": [
+    "graph",
+    "import",
+    "require",
+    "dependencies"
+  ],
   "author": "Noam Elboim <noam@mail.com>",
   "contributors": [
     {
