@@ -16,7 +16,10 @@ let path            = require('path'),
         6: path.join(filesPath,'dir2','6.txt'),
         7: path.join(filesPath,'dir2','7.txt'),
         8: path.join(filesPath,'8.txt'),
-        9: path.join(filesPath,'dir1','dir3','9.txt')
+        9: path.join(filesPath,'dir1','dir3','9.txt'),
+        10: path.join(filesPath,'dir4','withoutExtension.js'),
+        10: path.join(filesPath,'dir4','withoutFile.js'),
+        11: path.join(filesPath,'dir4','dir5', 'index.js'),
     },
     createGraph = options => {
         beforeEach(() => {
@@ -88,6 +91,36 @@ describe('graph', () => {
                     expect(Array.from(graph.graph.get(testFilesPaths[6]).parents)).to.deep.equal([testFilesPaths[4]]);
                     done();
                 }).catch(error => done(error));
+        });
+
+
+        describe('Folder imports should resolve to index file', () => {
+            it('should create graph on a file with parent and child when imports are for a folder(use index file)', (done) => {
+                graph.extensions.push('js');
+                graph.init(testFilesPaths[10], false)
+                    .then(() => {
+                        expect(graph.graph.get(testFilesPaths[11])).to.be.defined;
+                        expect(Array.from(graph.graph.get(testFilesPaths[10]).children)).to.deep.equal([testFilesPaths[11]]);
+                        expect(Array.from(graph.graph.get(testFilesPaths[11]).parents)).to.deep.equal([testFilesPaths[10]]);
+                        done();
+                    })
+                    .catch(error => done(error));
+            });
+
+            describe('Includes index but without the extension', () => {
+                it('Should add the extension', done => {
+                    graph.extensions.push('js');
+                    graph.init(testFilesPaths[10], false)
+                        .then(() => {
+                            expect(graph.graph.get(testFilesPaths[11])).to.be.defined;
+                            expect(Array.from(graph.graph.get(testFilesPaths[10]).children)).to.deep.equal([testFilesPaths[11]]);
+                            expect(Array.from(graph.graph.get(testFilesPaths[11]).parents)).to.deep.equal([testFilesPaths[10]]);
+                            done();
+                        })
+                        .catch(error => done(error));
+                });
+            });
+            
         });
     });
 
