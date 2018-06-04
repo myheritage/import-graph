@@ -1,6 +1,6 @@
 {
   "name": "import-graph",
-  "version": "2.0.1",
+  "version": "2.0.0",
   "description": "Create a graph of dependencies between files, supporting ES6 import syntax, SCSS @import syntax, CommonJS require syntax, mix of import and require and a custom regexp input. Based on sass-graph",
   "main": "index.js",
   "scripts": {
