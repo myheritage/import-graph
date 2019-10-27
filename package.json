@@ -1,6 +1,6 @@
 {
   "name": "import-graph",
-  "version": "2.0.1-0",
+  "version": "2.0.2",
   "description": "Create a graph of dependencies between files, supporting ES6 import syntax, SCSS @import syntax, CommonJS require syntax, mix of import and require and a custom regexp input. Based on sass-graph",
   "main": "index.js",
   "scripts": {
@@ -29,11 +29,11 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "glob": "~7.0.0",
-    "lodash": "~4.3.0"
+    "glob": "^7.0.0",
+    "lodash": "^4.3.0"
   },
   "devDependencies": {
-    "chai": "~3.5.0",
-    "mocha": "~2.4.5"
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2"
   }
 }
