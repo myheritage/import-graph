@@ -8,7 +8,7 @@ Based on [sass-graph](https://github.com/xzyfer/sass-graph).
 
 ### Example
 
-Having a folder containing 3 files that is being watched:
+Having a folder containing 3 files that are being watched:
 
 *file-a.js:*
 ```javascript
@@ -92,7 +92,7 @@ Create a graph object for either a folder path or a file path and return the gra
 
 You can choose a predefined pattern or a custom regular expression:
 
-* **'es6'** - Will create a graph for files using the es6 'import' syntax.
+* **'es6'** - Will create a graph for files using the es6 'import' syntax. (also supports dynamic import)
 * **'scss'** - Will create a graph for files using the scss '@import' syntax.
 * **'commonjs'** - Will create a graph for files using the CommonJS 'require' syntax.
 * **'js'** A combination of 'es6' and 'commonjs', using 'require' and 'import' syntax.

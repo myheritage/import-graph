@@ -36,7 +36,7 @@ describe('import-parser', () => {
         });
 
         it('should get strings for dependencies for all js syntax', () => {
-            expect(importParser.parse(contentMock)).to.deep.equal(['test1','test2','test5','test9','test10','test11','test12','test13']);
+            expect(importParser.parse(contentMock)).to.deep.equal(['test1','test2','test5', 'dynamic','test9','test10','test11','test12','test13', ]);
         });
 
         it('should get strings for dependencies for es6 import syntax', () => {
@@ -62,38 +62,37 @@ describe('import-parser', () => {
 
     describe('syntaxRegExps method', () => {
         it('should return the correct regexp for syntax all js syntax', () => {
-            expectToMatchRegex(null, /(([^\S]|^)import\s|([^\S]|^|=|\(|,)require\s*\()(.+?)[\);]/g);
-            expectToMatchRegex('js', /(([^\S]|^)import\s|([^\S]|^|=|\(|,)require\s*\()(.+?)[\);]/g);
+            expectToMatchRegexArray(null, [/([^\S]|^)import\s(.+?);/g, /import\((['"`][^'"`]+['"`])\)/g, /([^\S]|^|=|\(|,)require\s*\((.+?)\)/g]);
+            expectToMatchRegexArray('js', [/([^\S]|^)import\s(.+?);/g, /import\((['"`][^'"`]+['"`])\)/g, /([^\S]|^|=|\(|,)require\s*\((.+?)\)/g]);
         });
 
         it('should return the correct regexp for syntax es6 import syntax', () => {
-            expectToMatchRegex('es6', /([^\S]|^)import\s(.+?);/g);
+            expectToMatchRegexArray('es6', [/([^\S]|^)import\s(.+?);/g, /import\((['"`][^'"`]+['"`])\)/g]);
         });
 
         it('should return the correct regexp for syntax scss import syntax', () => {
-            expectToMatchRegex('scss', /([^\S]|^)@import\s(.+?);/g);
+            expectToMatchRegexArray('scss', [/([^\S]|^)@import\s(.+?);/g]);
         });
 
         it('should return the correct regexp for syntax commonjs require syntax', () => {
-            expectToMatchRegex('commonjs', /([^\S]|^|=|\(|,)require\s*\((.+?)\)/g);
+            expectToMatchRegexArray('commonjs', [/([^\S]|^|=|\(|,)require\s*\((.+?)\)/g]);
         });
 
         it('should return a custom made RegExp', () => {
-            expectToMatchRegex(/MyTestRegExp/g, /MyTestRegExp/g);
+            expectToMatchRegexArray(/MyTestRegExp/g, [/MyTestRegExp/g]);
         });
 
         /**
          * helper for syntaxRegExps method spec
          * @param {String|RegExp} syntaxParam
-         * @param {RegExp} toMatchRegExp
+         * @param {[RegExp]} toMatchRegExps
          */
-        function expectToMatchRegex (syntaxParam, toMatchRegExp) {
+        function expectToMatchRegexArray(syntaxParam, toMatchRegExps) {
             if (syntaxParam) {
                 importParser.init(syntaxParam);
             }
-            let resultRegex = importParser.syntaxRegExp;
-            expect(resultRegex instanceof RegExp).to.be.true;
-            expect(resultRegex.toString()).to.equal((toMatchRegExp).toString());
+            let resultRegExps = importParser.syntaxRegExps;
+            expect(resultRegExps.toString()).to.equal(toMatchRegExps.toString());
         }
     });
 });
