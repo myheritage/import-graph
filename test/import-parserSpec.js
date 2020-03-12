@@ -20,7 +20,9 @@ let chai            = require('chai'),
                         "_require(\"test14\")\n" +
                         "funcrequire(\"test15\")\n" +
                         "customregexp'test16'\n" +
-                        "//import test 'test17';";
+                        "//import test 'test17';" +
+                        "import('dynamic')";
+
 
 describe('import-parser', () => {
     beforeEach(() => {
@@ -39,7 +41,7 @@ describe('import-parser', () => {
 
         it('should get strings for dependencies for es6 import syntax', () => {
             importParser.init('es6');
-            expect(importParser.parse(contentMock)).to.deep.equal(['test1','test2','test5']);
+            expect(importParser.parse(contentMock)).to.deep.equal(['test1','test2','test5', 'dynamic']);
         });
 
         it('should get strings for dependencies for scss import syntax', () => {
@@ -58,7 +60,7 @@ describe('import-parser', () => {
         });
     });
 
-    describe('syntaxRegExp method', () => {
+    describe('syntaxRegExps method', () => {
         it('should return the correct regexp for syntax all js syntax', () => {
             expectToMatchRegex(null, /(([^\S]|^)import\s|([^\S]|^|=|\(|,)require\s*\()(.+?)[\);]/g);
             expectToMatchRegex('js', /(([^\S]|^)import\s|([^\S]|^|=|\(|,)require\s*\()(.+?)[\);]/g);
@@ -81,7 +83,7 @@ describe('import-parser', () => {
         });
 
         /**
-         * helper for syntaxRegExp method spec
+         * helper for syntaxRegExps method spec
          * @param {String|RegExp} syntaxParam
          * @param {RegExp} toMatchRegExp
          */

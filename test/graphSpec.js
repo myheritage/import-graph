@@ -99,7 +99,7 @@ describe('graph', () => {
                 graph.extensions.push('js');
                 graph.init(testFilesPaths[10], false)
                     .then(() => {
-                        expect(graph.graph.get(testFilesPaths[11])).to.be.defined;
+                        expect(graph.graph.get(testFilesPaths[11])).not.to.equal(undefined);
                         expect(Array.from(graph.graph.get(testFilesPaths[10]).children)).to.deep.equal([testFilesPaths[11]]);
                         expect(Array.from(graph.graph.get(testFilesPaths[11]).parents)).to.deep.equal([testFilesPaths[10]]);
                         done();
@@ -112,7 +112,7 @@ describe('graph', () => {
                     graph.extensions.push('js');
                     graph.init(testFilesPaths[10], false)
                         .then(() => {
-                            expect(graph.graph.get(testFilesPaths[11])).to.be.defined;
+                            expect(graph.graph.get(testFilesPaths[11])).not.to.equal(undefined);
                             expect(Array.from(graph.graph.get(testFilesPaths[10]).children)).to.deep.equal([testFilesPaths[11]]);
                             expect(Array.from(graph.graph.get(testFilesPaths[11]).parents)).to.deep.equal([testFilesPaths[10]]);
                             done();
